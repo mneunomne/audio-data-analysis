@@ -6,10 +6,9 @@ import matplotlib as mpl
 from matplotlib import pyplot
 from matplotlib import colors
 import numpy as np
+import codecs, json
+
 CHUNK = 1024 * 10 # 1024
-
-
-
 
 if len(sys.argv) < 2:
     print("Plays a wave file.\n\nUsage: %s filename.wav" % sys.argv[0])
@@ -55,7 +54,7 @@ while len(data) > 0:
         # time.sleep(0.01)
         a = min(a, val)
         b = max(b, val)
-        # int_list.append(int_val)
+        int_list.append(int_val)
         bytes_val = int_val.to_bytes(2, 'big')
         byte_list.append(bytes_val)
     
@@ -74,17 +73,16 @@ stream.close()
 # p.terminate()
 
 
-grid_values = np.reshape(values, (-1, 77))
+grid_values = np.reshape(values, (-1, 62))
 
-print(grid_values)
+# print(grid_values)
 
-# make a color map of fixed colors
-cmap = mpl.colors.ListedColormap(['blue','black','red'])
-#bounds=[0,75,125,255]
-#norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+data = grid_values.tolist() # nested lists with same data, indices
+print(data)
+file_path = "data.json" ## your path variable
+json.dump(int_list, codecs.open(file_path, 'w', encoding='utf-8'), indent=2) ### this saves the array in .json format
 
 # tell imshow about color map so that only set colors are used
-img = pyplot.imshow(grid_values, interpolation='nearest', cmap = 'gray')
-
+# img = pyplot.imshow(grid_values, interpolation='nearest', cmap = 'magma')
 
 pyplot.show()
